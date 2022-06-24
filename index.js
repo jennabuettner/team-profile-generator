@@ -1,6 +1,7 @@
 const inquirer = require("inquirer");
-const jest = require("jest");
+const fs = require("fs");
 const Manager = require("./lib/Manager");
+const renderTeam = require('./src/html-templates')
 
 const teamMemberObjArr = [];
 
@@ -101,6 +102,11 @@ const init = () => {
         addEmployees();
       });
   }
+
+  function buildTeam() {
+    fs.writeFile('./dist/index.html', renderTeam(teamMemberObjArr), 'utf-8')
+  }
+
   createManager();
 };
 
