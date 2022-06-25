@@ -34,8 +34,8 @@ const init = () => {
       ])
       .then((answers) => {
         const manager = new Manager(
-          answers.id,
           answers.name,
+          answers.id,
           answers.email,
           answers.officeNumber
         );
@@ -44,61 +44,34 @@ const init = () => {
       });
   };
 
-  function addEmployees() {
-    inquirer
-      .prompt([
-        {
-          type: "list",
-          message: "What employees would you like to add?",
-          name: "choice",
-          choices: ["Engineer", "Intern", "I'm Done"],
-        },
-      ])
-      .then((answer) => {
-        switch (answer.choices) {
-          case "Engineer":
-            createEngineer();
-            break;
-
-          case "Intern":
-            createIntern();
-            break;
-
-          default:
-            buildTeam();
-            break;
-        }
-      });
-  }
-
   function createEngineer() {
     inquirer
       .prompt([
         {
           type: "input",
-          message: "What is the Intern's Id?",
+          message: "What is the Engineer's Id?",
           name: "id",
         },
         {
           type: "input",
-          message: "what is the Intern's Name?",
+          message: "what is the Engineer's Name?",
           name: "name",
         },
         {
           type: "input",
-          message: "What is the Intern's email?",
+          message: "What is the Engineer's email?",
           name: "email",
         },
         {
           type: "input",
-          message: "What is the Intern's Github?",
+          message: "What is the Engineer's Github?",
           name: "github",
         },
       ])
       .then((answers) => {
         const engineer = new Engineer(
-          answers.id,
           answers.name,
+          answers.id,
           answers.email,
           answers.github
         );
@@ -133,13 +106,40 @@ const init = () => {
       ])
       .then((answers) => {
         const intern = new Intern(
-          answers.id,
           answers.name,
+          answers.id,
           answers.email,
-          answers.github
+          answers.school
         );
         teamMemberObjArr.push(intern);
         addEmployees();
+      });
+  }
+
+  function addEmployees() {
+    inquirer
+      .prompt([
+        {
+          type: "list",
+          message: "What employees would you like to add?",
+          name: "choice",
+          choices: ["Engineer", "Intern", "I'm Done"],
+        },
+      ])
+      .then((answer) => {
+        switch (answer.choice) {
+          case "Engineer":
+            createEngineer();
+            break;
+
+          case "Intern":
+            createIntern();
+            break;
+
+          default:
+            buildTeam();
+            break;
+        }
       });
   }
 
@@ -161,9 +161,9 @@ const init = () => {
         ${renderTeam(teamMemberObjArr)}
       </body>
     </html>`;
-    fs.writeFile("./dist/index.html", html, (err) => {
-      console.log(err);
-    });
+    fs.writeFile("./dist/index.html", html, (err) =>
+      err ? console.error(err) : console.log("success")
+    );
   }
   createManager();
 };
