@@ -1,7 +1,9 @@
 const inquirer = require("inquirer");
 const fs = require("fs");
 const Manager = require("./lib/Manager");
-const renderTeam = require('./src/html-templates')
+const Engineer = require("./lib/engineer");
+const Intern = require("./lib/intern");
+const renderTeam = require("./src/html-templates");
 
 const teamMemberObjArr = [];
 
@@ -43,15 +45,16 @@ const init = () => {
   };
 
   function addEmployees() {
-    inquirer,
-      prompt([
+    inquirer
+      .prompt([
         {
-          type: "lis",
+          type: "list",
           message: "What employees would you like to add?",
-          name: "choise",
+          name: "choice",
           choices: ["Engineer", "Intern", "I'm Done"],
         },
-      ]).then((answer) => {
+      ])
+      .then((answer) => {
         switch (answer.choices) {
           case "Engineer":
             createEngineer();
@@ -67,28 +70,29 @@ const init = () => {
         }
       });
   }
+
   function createEngineer() {
     inquirer
       .prompt([
         {
           type: "input",
-          message: "What is the Managers Id?",
+          message: "What is the Intern's Id?",
           name: "id",
         },
         {
           type: "input",
-          message: "what is the Managers Name?",
+          message: "what is the Intern's Name?",
           name: "name",
         },
         {
           type: "input",
-          message: "What is the Managers email?",
+          message: "What is the Intern's email?",
           name: "email",
         },
         {
           type: "input",
-          message: "What is the Employees GitHub?",
-          name: "officeNumber",
+          message: "What is the Intern's Github?",
+          name: "github",
         },
       ])
       .then((answers) => {
@@ -103,11 +107,64 @@ const init = () => {
       });
   }
 
-  function buildTeam() {
-    fs.writeFile('./dist/index.html', renderTeam(teamMemberObjArr), 'utf-8')
+  function createIntern() {
+    inquirer
+      .prompt([
+        {
+          type: "input",
+          message: "What is the Intern's Id?",
+          name: "id",
+        },
+        {
+          type: "input",
+          message: "what is the Intern's Name?",
+          name: "name",
+        },
+        {
+          type: "input",
+          message: "What is the Intern's email?",
+          name: "email",
+        },
+        {
+          type: "input",
+          message: "What is the Intern's School?",
+          name: "school",
+        },
+      ])
+      .then((answers) => {
+        const intern = new Intern(
+          answers.id,
+          answers.name,
+          answers.email,
+          answers.github
+        );
+        teamMemberObjArr.push(intern);
+        addEmployees();
+      });
   }
 
+  function buildTeam() {
+    const html = `<!DOCTYPE html>
+    <html>
+      <head>
+        <title>Media Query for Screen</title>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor"
+          crossorigin="anonymous"
+        />
+      </head>
+      <body>
+        ${renderTeam(teamMemberObjArr)}
+      </body>
+    </html>`;
+    fs.writeFile("./dist/index.html", html, (err) => {
+      console.log(err);
+    });
+  }
   createManager();
 };
-
 init();
