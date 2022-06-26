@@ -147,7 +147,7 @@ const init = () => {
     const html = `<!DOCTYPE html>
     <html>
       <head>
-        <title>Media Query for Screen</title>
+        <title>Team Profile Generator</title>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link
@@ -158,7 +158,12 @@ const init = () => {
         />
       </head>
       <body>
-        ${renderTeam(teamMemberObjArr)}
+        <header>
+            <h1 class="nav">Team Assembled<h1>
+        </header>
+        <div class="card-container"> 
+            ${renderTeam(teamMemberObjArr)}
+        </div>
       </body>
     </html>`;
     fs.writeFile("./dist/index.html", html, (err) =>
